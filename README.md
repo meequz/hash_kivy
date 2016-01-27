@@ -7,6 +7,9 @@ Install:
 git clone https://github.com/kivy/buildozer.git
 cd buildozer
 sudo python2.7 setup.py install
+```
+Navigate to the `hash_kivy` folder, then:
+```
 buildozer init
 buildozer android debug deploy run
 ```
