@@ -10,8 +10,7 @@ sudo python2.7 setup.py install
 ```
 Navigate to the `hash_kivy` folder, then:
 ```
-buildozer init
-buildozer android debug deploy run
+buildozer android debug deploy
 ```
 
 Now copy a file bin/MD5Hash-0.1-debug.apk to the phone and install it.
