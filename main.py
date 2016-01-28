@@ -8,6 +8,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
+from kivy.core.clipboard import Clipboard
 
 
 class WidgetFactory(object):
@@ -47,7 +48,8 @@ class MainScreen(Screen):
         self._current_string = ''
         self.clear_widgets()
         
-        result_label_1, result_label_2 = self._create_result()
+        copy_btn = self._create_top_box()
+        result_label_1, result_label_2 = self._create_result_labels()
         name_input, salt_input = self._create_inputs()
         self.add_widget(Label())
         f_slider = self._create_formatting()
@@ -58,14 +60,30 @@ class MainScreen(Screen):
             'f_slider': f_slider,
             'name_input': name_input,
             'salt_input': salt_input,
+            'copy_btn': copy_btn,
         }
         
         self.add_widget(Label())
         self._create_generate_btn()
         self.add_widget(Label())
     
-    def _create_result(self):
-        self.add_widget(self.wf.get_label('Result:'))
+    def _create_top_box(self):
+        box = BoxLayout(orientation='horizontal')
+        box.add_widget(self.wf.get_label('Result:'))
+        
+        def binding(btn):
+            text_to_copy = self.hash_repr.text[:self.hash_repr.format_border]
+            Clipboard.copy(text_to_copy)
+        
+        copy_btn = self.wf.get_btn('Copy')
+        copy_btn.disabled = True
+        copy_btn.bind(on_release=binding)
+        box.add_widget(copy_btn)
+        
+        self.add_widget(box)
+        return copy_btn
+        
+    def _create_result_labels(self):
         result_label_1 = self.wf.get_label(mono=True)
         result_label_2 = self.wf.get_label(mono=True)
         result_label_1.color = [0.7, 0.7, 0.7, 1]
@@ -75,7 +93,7 @@ class MainScreen(Screen):
         return result_label_1, result_label_2
     
     def _create_inputs(self):
-        self.add_widget(self.wf.get_label('Name:'))
+        self.add_widget(self.wf.get_label('String:'))
         name_input = self.wf.get_text_input()
         self.add_widget(name_input)
         
@@ -119,17 +137,19 @@ class MainScreen(Screen):
         hash_string = hashlib.md5(hash_string)
         hash_string = hash_string.hexdigest()
         self._set_result(hash_string)
+        copy_btn = self._important_widgets.get('copy_btn')
+        copy_btn.disabled = False
     
     def _set_result(self, text):
         f_slider = self._important_widgets.get('f_slider')
         result_label_1 = self._important_widgets.get('result_label_1')
         result_label_2 = self._important_widgets.get('result_label_2')
         
-        hash_repr = HashRepr(
+        self.hash_repr = HashRepr(
             text, format_border=int(f_slider.value), color='ffff00')
         
-        result_label_1.text = hash_repr.raw[0]
-        result_label_2.text = hash_repr.raw[1]
+        result_label_1.text = self.hash_repr.raw[0]
+        result_label_2.text = self.hash_repr.raw[1]
 
 
 class HashRepr(object):
