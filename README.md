@@ -13,4 +13,4 @@ Navigate to the `hash_kivy` folder, then:
 buildozer android debug deploy
 ```
 
-Now copy a file bin/MD5Hash-0.1-debug.apk to the phone and install it.
+Now copy a file `bin/*.apk` to the phone and install it.
