@@ -1,14 +1,16 @@
 # hash_kivy
 Generates hash by string on your android phone
 
-Install:
+Installation
+
+1) Install buildozer:
 
 ```
 git clone https://github.com/kivy/buildozer.git
 cd buildozer
 sudo python2.7 setup.py install
 ```
-Navigate to the `hash_kivy` folder, then:
+2) Navigate to the `hash_kivy` folder, then do:
 ```
 buildozer android debug deploy
 ```

@@ -67,6 +67,12 @@ class MainScreen(Screen):
         self.add_widget(Label())
         self.add_widget(Label())
     
+    @property
+    def _current_string(self):
+        name_input = self._important_widgets.get('name_input')
+        salt_input = self._important_widgets.get('salt_input')
+        return name_input.text + salt_input.text
+    
     def _create_top_box(self):
         box = BoxLayout(orientation='horizontal')
         box.add_widget(self.wf.get_label('Result:'))
@@ -121,12 +127,6 @@ class MainScreen(Screen):
         self.add_widget(f_label)
         self.add_widget(f_slider)
         return f_slider
-    
-    @property
-    def _current_string(self):
-        name_input = self._important_widgets.get('name_input')
-        salt_input = self._important_widgets.get('salt_input')
-        return name_input.text + salt_input.text
     
     def _create_generate_btn(self):
         def binding(btn):
