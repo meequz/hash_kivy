@@ -12,7 +12,7 @@ from kivy.core.clipboard import Clipboard
 
 
 class WidgetFactory(object):
-    FONT_SIZE = '24dp'
+    FONT_SIZE = '20dp'
     
     def get_label(self, text='', mono=False):
         label = Label(
@@ -45,7 +45,6 @@ class MainScreen(Screen):
     FORMAT_BORDER_MAX = 32
     
     def create(self, *args):
-        self._current_string = ''
         self.clear_widgets()
         
         copy_btn = self._create_top_box()
@@ -65,6 +64,7 @@ class MainScreen(Screen):
         
         self.add_widget(Label())
         self._create_generate_btn()
+        self.add_widget(Label())
         self.add_widget(Label())
     
     def _create_top_box(self):
@@ -88,6 +88,8 @@ class MainScreen(Screen):
         result_label_2 = self.wf.get_label(mono=True)
         result_label_1.color = [0.7, 0.7, 0.7, 1]
         result_label_2.color = [0.7, 0.7, 0.7, 1]
+        result_label_1.font_size = '22dp'
+        result_label_2.font_size = '22dp'
         self.add_widget(result_label_1)
         self.add_widget(result_label_2)
         return result_label_1, result_label_2
@@ -120,12 +122,14 @@ class MainScreen(Screen):
         self.add_widget(f_slider)
         return f_slider
     
-    def _create_generate_btn(self):
+    @property
+    def _current_string(self):
         name_input = self._important_widgets.get('name_input')
         salt_input = self._important_widgets.get('salt_input')
-        
+        return name_input.text + salt_input.text
+    
+    def _create_generate_btn(self):
         def binding(btn):
-            self._current_string = name_input.text + salt_input.text
             self._show_hash()
         
         generate_btn = self.wf.get_btn('Generate')
